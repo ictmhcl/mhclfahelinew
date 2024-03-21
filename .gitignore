@@ -1,0 +1,17 @@
+./well-known
+./affiliate
+./b4bmlGWfaheli
+./hajjWS
+./mhc
+./mib
+./sds
+./sdsTest
+./.gitignore
+./faheli/assets
+./faheli/files
+./faheli/plugins
+./faheli/protected/extensions/CJuiDateTimePicker
+./faheli/protected/extensions/csv
+./faheli/protected/extensions/jwt
+./faheli/protected/extensions/PHPMailer
+./faheli/protected/runtime
