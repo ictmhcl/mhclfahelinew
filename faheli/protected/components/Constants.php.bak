@@ -1,0 +1,218 @@
+<?php
+
+class Constants {
+
+  //
+  //country globals
+  const MALDIVES_CODE = 'MV';
+  const MALDIVES_TIMEZONE = 'Indian/Maldives';
+  const MALDIVES_COUNTRY_ID = 128;
+  const MALE_ISLAND_ID = 1;
+  const WEEK_START_DAY = 'Sunday';
+  const WEEKEND_DAY_ONE = 'Friday';
+  const WEEKEND_DAY_TWO = 'Saturday';
+  const LEGAL_ADULT_AGE = 18;
+  const MHCL_ORG_ID = 2;
+  const HQ_PORT_NO = 19443;
+  const HQ_PATH = "/hq";
+
+  const ADMIN_MOBILE_USER_ID = 71;
+  const REGISTRATIONS_ADMIN_EMAIL = 'registrations@mhcl.mv';
+  const ADMIN_MOBILE_NUMBER = 7774489;
+  //
+  //genders
+  const GENDER_MALE = 1;
+  const GENDER_FEMALE = 2;
+  //
+  //Patterns
+  const ID_CARD_PATTERN = '/^A\d{6}$/'; //'A' followed by six digits
+  const MOBILE_PHONE_NUMBER_PATTERN = '/^[7|9]\d{6}$/'; //'7' or '9' followed by six digits
+  const PERSONAL_NAME = '/^[- a-zA-Z\pL\']*$/u'; //alpha & unicode characters (�), hiphens, apostrophes (') and spaces only
+  const INDEX_NO_PATTERN = '/^[-\/_\'a-zA-Z\d]+$/'; //alphanumeric & hiphens, apostrophes, slashes, underscores only
+  //
+  //date formats
+  const DATE_DISPLAY_FORMAT = 'dd M yy'; // for CJuiDatePicker
+  const DATE_SAVE_FORMAT = 'Y-m-d'; // for MySQL date format columns
+  const DATETIME_SAVE_FORMAT = 'Y-m-d H:i:s'; // for MySQL date format columns
+  //
+  //application states
+  const APPLICATION_INCOMPLETE = 1;
+  const APPLICATION_PENDING_VERIFICATION = 2;
+  const APPLICATION_PAYMENT_PENDING = 3;
+  const APPLICATION_REGISTERED = 4;
+  //
+  //member states
+  const MEMBER_PENDING_FIRST_PAYMENT = 1;
+  const MEMBER_NORMAL = 2;
+  const MEMBER_DEREGISTERED = 3;
+  const MEMBER_MAHRAM = 4;
+  //
+  //user states
+  const USER_CREATED = 1;
+  const USER_ACTIVE = 2;
+  const USER_CODE_SENT = 3;
+  const USER_LOGGED_IN = 4;
+  const USER_LOGGED_OUT = 5;
+  const USER_LOCKED = 6;
+  //
+  //user permission to Manage Own Organization Users
+  const MANAGE_ORG_USERS_FUNCTION_ID = 58;
+  const UPDATE_OWN_INFO_FUNCTION_ID = 23;
+  //
+  //paths
+  const UPLOADS = 1;
+  const IMAGES = 2;
+  const UPLOAD_PATH_CONFIG_DIRECTIVE = "uploadFolderPath";
+  const IMAGES_PATH_CONFIG_DIRECTIVE = "imagesFolderPath";
+  //
+  // Default Maturity Value / Batch Size
+  const MATURITY_VALUE = 52473.75;
+  const FULL_AMOUNT = 69965;
+  const BATCH_SIZE = 371;
+  const NEXT_BATCH = 1438;
+  //
+  //jobs
+  const JOB_MEMBER_REGISTRATIONS = 1;
+  const JOB_REGISTRATION_VERIFICATION = 2;
+  const JOB_PAYMENT_COLLECTION = 3;
+  const JOB_COLLECTION_REVISIONS_AND_REPORTING = 4;
+  const JOB_SDS_ADMIN = 5;
+  const SDS_ORG_PORT_NUMBER = 32443;
+  const SDS_CLIENT_PATH = "/sds";
+  //
+  // Sds Statement Status (values are used by html classes in Sds Controller
+  // statements list view)
+  const SDS_STATEMENT_UNCONFIRMED = 'unconfirmed';
+  const SDS_STATEMENT_CONFIRMED = 'confirmed';
+  const SDS_STATEMENT_CANCELLED = 'cancelled';
+  //
+  // online payment types
+  const ONLINE_PAYMENT_HAJJ = 1;
+  const ONLINE_PAYMENT_UMRA = 2;
+  const ONLINE_PAYMENT_AGEEGA = 3;
+  //
+  // image files
+  const BTN_CROSS = 'cross_red.png';
+  const BTN_COMPLETE = 'check_green.png';
+  const BTN_INCOMPLETE = 'check_grey.png';
+  const BTN_CLOSED = 'folder_closed_grey.png';
+  const BTN_OPENED = 'folder_open_grey.png';
+  const BTN_IN = 'inbox_green.png';
+  const BTN_LIST = 'list_green.png';
+  const BTN_OPEN = 'process_blue.png';
+  const BTN_PROCESS = 'process_grey.png';
+  const BTN_USER = 'user_brown.png';
+  const BTN_MOBILE = 'mobile.png';
+  //
+  //transaction mediums
+  const TRANSACTION_MEDIUM_CASH = 1;
+  const TRANSACTION_MEDIUM_CARD = 2;
+  const TRANSACTION_MEDIUM_CHEQUE = 3;
+  const TRANSACTION_MEDIUM_OTHER = 4;
+  const TRANSACTION_MEDIUM_COMPLETED_HAJJ = 5;
+  const TRANSACTION_MEDIUM_TO_MIA = 6;
+  const TRANSACTION_MEDIUM_ONLINE = 7;
+  //
+    //transaction types
+  const TRANSACTION_TYPE_REGISTRATION_FEE = 1;
+  const TRANSACTION_TYPE_DEPOSIT = 2;
+  const TRANSACTION_TYPE_PROFIT = 3;
+  const TRANSACTION_TYPE_HAJJ_PAYMENT = 4;
+  const TRANSACTION_TYPE_TRANSFER = 5;
+  //
+  // ageega reasons
+  const AGEEGA_REASON_CHILDREN_NAMING = 1;
+  const AGEEGA_REASON_NADHURU_FUDHDHAN = 2;
+  const AGEEGA_REASON_NON_DISCLOSED = 3;
+  //
+  // account types
+  const ACCOUNT_TYPE_HAJJ = 1;
+  const ACCOUNT_TYPE_UMRA = 2;
+  const ACCOUNT_TYPE_HAJJ_INTERNAL = 3;
+  //
+  // trip types
+  const TRIP_TYPE_HAJJ = 1;
+  const TRIP_TYPE_UMRA = 2;
+
+  // route types
+  const ROUTE_TYPE_FLIGHT = 1;
+  const ROUTE_TYPE_BUS = 2;
+
+  //
+  // trip states
+  const SLOT_MATURED = 1;
+  const SLOT_FULLY_PAID = 2;
+  const SLOT_OFFICIAL_ASSIGNMENT = 3;
+  const SLOT_CANCELLED = 4;
+  const SLOT_SECURED = 5;
+  const SLOT_CONSUMED = 6;
+  const SLOT_PENDING_MAHRAM = 7;
+  //
+  // pilgrim types
+  const PILGRIM_TYPE_PRIMARY = 1;
+  const PILGRIM_TYPE_MAHRAM = 2;
+  const PILGRIM_TYPE_CARETAKER = 3;
+  //
+  // slot credit states
+  const SLOT_CREDIT_VALID = 1;
+  const SLOT_CREDIT_INVALID = 2;
+  // trip slot type states
+  const TRIP_SLOT_TYPE_STATE_VALID = 1;
+  const TRIP_SLOT_TYPE_STATE_INVALID = 2;
+  //
+  // first available hajj product
+  const PRODUCT_FIRST_AVAILABLE_HAJJ = 1;
+  //
+  // product states
+  const PRODUCT_STATE_VALID = 1;
+  const PRODUCT_STATE_INVALID = 2;
+  //
+  // product preference states
+  const MEMBER_PRODUCT_PREFERRED = 1;
+  const MEMBER_PRODUCT_MATURED = 2;
+  const MEMBER_PRODUCT_FULLY_PAID = 3;
+  const MEMBER_PRODUCT_CANCELLED = 4;
+  //
+  //hajj batch states
+  const HAJJ_BATCH_OPEN = 1;
+  const HAJJ_BATCH_CLOSED = 2;
+  //
+  //hajj list states
+  const HAJJ_LIST_TENTATIVE = 1;
+  const HAJJ_LIST_CANCELLED = 2;
+  const HAJJ_LIST_FINAL = 3;
+  //
+  //selection status for hajj list
+  const PILGRIM_SELECTED = 1;
+  const PILGRIM_RESERVE = 2;
+  //
+  // flight direction
+  const FLIGHT_DEPATURE = 1;
+  const FLIGHT_RETURN = 0;
+  //
+
+  const TRIP_SUBLIST_TYPE_CONFIRMED = 1;
+  const TRIP_SUBLIST_TYPE_HAJJI_CARD = 2;
+  const TRIP_SUBLIST_TYPE_VACCINATED = 3;
+  const TRIP_SUBLIST_TYPE_MEDICAL = 4;
+  const TRIP_SUBLIST_TYPE_PASSPORT = 5;
+  const TRIP_SUBLIST_TYPE_AGREEMENT = 6;
+  const TRIP_SUBLIST_TYPE_DHUA = 7;
+  const TRIP_SUBLIST_TYPE_NOTES = 8;
+
+  const SEARCH_LIMIT = 10;
+
+  const TRIP_LIST_TYPE_MHCL = 1;
+  const TRIP_LIST_TYPE_OTHER = 2;
+  //default configuration record
+  const MAIN_CONFIG_RECORD_ID = 1;
+
+  const REGISTRATION_PDF = "http://mhcl.mv/wp-content/uploads/2019/12/MHCL-Service-Application-Form.pdf";
+  //
+  // Data App server address - need the ending slash "/"
+//  const MHC_DATA_APP_SERVER = "http://mhcl.mv/mhcpush/mhcAppData/index.php/";
+//  const MHC_DATA_APP_SERVER = "http://localhost/mhcOnline/index.php/";
+//  const MHC_DATA_APP_SERVER = "http://tabs.netii.net/root/mhcAppData/index.php/";
+}
+
+?>

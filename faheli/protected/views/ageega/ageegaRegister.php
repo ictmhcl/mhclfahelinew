@@ -1,0 +1,5 @@
+<?php
+/**
+ *
+ * @var AgeegaController $this
+ */
