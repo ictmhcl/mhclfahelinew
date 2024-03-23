@@ -209,38 +209,7 @@ $sheepQty = empty($sheepQty)?0:$sheepQty;
         </div>
       </div>
     </div>
-    <div class="panel panel-success">
-      <div class="panel-heading"><?=H::t('site','documents')?></div>
-      <div class="panel-body">
-
-          <?php $doc = 'ageega_form'; ?>
-          <div class="form-group">
-            <?php echo $form->labelEx($ageega, $doc, [
-              'class' => 'col-md-3 control-label', 'id' => 'form_label'
-            ]); ?>
-            <script>turnBlockOn = false;</script>
-            <div class="col-md-4">
-              <div class="input-group">
-                  <span class="input-group-btn">
-                    <span class="btn btn-info btn-xs btn-file"
-                          style="height: 34px"
-                          onClick="js:turnBlockOn = false;">
-                      <?=H::t('site','fileSelect')?> <?php echo $form->fileField($ageega, $doc); ?>
-                    </span>
-                  </span>
-                <input type="text" class="form-control" readonly="">
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="panel-body">
-        <div class="form-group row">
-          <div class="col-md-6 col-md-offset-1">
-            <?=H::t('ageega', 'downloadFormInfo')?>
-          </div>
-        </div>
-      </div>
-    </div>
+     
     <div class="panel panel-success">
       <div class="panel-footer">
         <div class="form-group">

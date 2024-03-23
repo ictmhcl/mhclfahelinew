@@ -42,8 +42,8 @@ class Ageega extends CActiveRecord
 		return [
 			['phone_number, paid_amount', 'required', 'message' => '{attribute} ' .
 					H::t('site','required')],
-			['ageega_form', 'required', 'message' => '{attribute} ' . H::t('site',
-							'attach')],
+			// ['ageega_form', 'required', 'message' => '{attribute} ' . H::t('site',
+			// 				'attach')],
 			['person_id, ageega_reason_id', 'numerical', 'integerOnly'=>true],
 			['paid_amount', 'numerical'],
 			['phone_number, ageega_form', 'length', 'max'=>255],
