@@ -144,9 +144,9 @@ class RegistrationController extends Controller {
 
     
     if ($this->person->member)
-      $this->redirect(['member/statement']);
-    if ($this->person->hajjApplicationForm)
-      $this->redirect(['registration/hajjRegistrationSubmitted']);
+      $this->redirect(['members/statement']);
+    if ($this->person)
+      $this->person->registerMember(0);
     $docsArray = ['application_form', 'mahram_document'];
 
     #region Create New App Form & load available data

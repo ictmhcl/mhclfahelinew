@@ -17,6 +17,7 @@
  * @property string         $perm_address_english
  * @property string         $perm_address_dhivehi
  * @property integer        $agreed_to_terms_of_use
+ * @property integer        $dnr_verified
  * @property integer        $country_id
  * @property integer        $photo_file_id
  * @property integer        $operation_log_id
@@ -90,7 +91,7 @@ class Persons extends CActiveRecord {
         'length', 'max' => 255],
 //      ['three_names_english','checkThreeNames'],
 //      ['d_o_b', 'safe'],
-      ['three_names_english, three_names_arabic, d_o_b', 'safe'],
+      ['three_names_english, three_names_arabic, dnr_verified, d_o_b', 'safe'],
       // The following rule is used by search().
       // @todo Please remove those attributes that should not be searched.
       ['id, id_no, full_name_english, full_name_dhivehi, d_o_b, perm_address_island_id, gender_id, perm_address_english, perm_address_dhivehi, photo_file_id, operation_log_id', 'safe', 'on' => 'search'],
@@ -145,6 +146,96 @@ class Persons extends CActiveRecord {
       )
         $this->addError('three_names_arabic',
           'Three Names Arabic is incomplete.');
+    }
+  }
+
+  public function registerMember(bool $fardHajjPerformed) {
+    if (!empty($this->member))
+      return True;
+    if (!$this->dnr_verified)
+      return False;
+
+    
+    #remove any existing forms          
+    if (!empty($existingHajjForm = ApplicationForms::model()->findByAttributes(['id_no'=>$this->id_no])))
+    {
+      if (!empty($existingVerification = ApplicationFormVerifications::model()->findByAttributes(['application_form_id' => $existingHajjForm->id])))
+        $existingVerification->delete();            
+      $existingHajjForm->delete();          
+    }
+
+    $hajjForm = new ApplicationFormsHelper();
+    $hajjForm->setAttributes([
+      'application_date' => Yii::app()->params['date'],
+      'applicant_full_name_english' => $this->full_name_english,
+      'applicant_full_name_dhivehi' => $this->full_name_dhivehi,
+      'id_no' => $this->id_no, 'd_o_b' => $this->d_o_b,
+      'applicant_gender_id' => $this->gender_id,
+      'country_id' => $this->country_id,
+      'perm_address_island_id' => $this->perm_address_island_id,
+      'perm_address_english' => $this->perm_address_english,
+      'perm_address_dhivehi' => $this->perm_address_dhivehi,
+      'phone_number_1' => $this->phone,
+      'email_address' => $this->email,
+      'id_copy' => $this->idCopy,
+      'emergency_contact_full_name_dhivehi' => '-',
+      'emergency_contact_phone_no' => '-',
+      'badhal_hajj' => (int)$fardHajjPerformed,
+      'application_form' => 'not_required_anymore.png',
+    ]);
+
+    $hajjForm->state_id = Constants::APPLICATION_PENDING_VERIFICATION;
+    try {
+      if (!$hajjForm->save())
+        throw new CException("Registration of " . $this->id_no . " validation errors: " .  CJSON::encode($hajjForm->errors));
+    } catch (CException $ex) {
+      ErrorLog::exceptionLog($ex);
+      return False;
+    }
+
+    $verifyModel = new ApplicationFormVerifications();
+    $verifyModel->application_form_id = $hajjForm->id;
+    $verifyModel->applicant_verified = 1;
+    $verifyModel->save(false);
+
+    $member = new Members();
+    $member->setAttributes([
+      'person_id' => $this->id,
+      'application_form_id' => $hajjForm->id,
+      'phone_number_1' => $this->phone,
+      'email_address' => $this->email,
+      'badhal_hajj' => $hajjForm->badhal_hajj,
+      'mhc_no' => Members::generateMemberNumber(),
+      'membership_date' => Yii::app()->params['date'],
+      'state_id' => Constants::MEMBER_PENDING_FIRST_PAYMENT
+    ]);
+
+    try {
+      if (!$member->save())
+        throw new CException("Member model save errors: " . CJSON::encode($member->errors));
+      Helpers::textMessage($this->phone, $this->full_name_english . H::t('site', 'faheliMemberRegistered'));
+    } catch (CException $ex) {
+      ErrorLog::exceptionLog($ex);
+      return False;
+    }
+    return True;
+    
+  }
+
+  public function dnrVerifyPerson() {
+    if ($this->dnr_verified != 1) {
+      if (False != ($dnr_data = Helpers::getDnrRecord($this->id_no, $this->full_name_english))) {
+        $this->full_name_english = $dnr_data->full_name_english;
+        $this->full_name_dhivehi = $dnr_data->full_name_dhivehi;
+        $this->perm_address_english = $dnr_data->addressEn;
+        $this->perm_address_dhivehi = $dnr_data->addressMv;
+        $this->perm_address_island_id = $dnr_data->island_id;
+        $this->d_o_b = $dnr_data->d_o_b;
+        $this->gender_id = $dnr_data->gender_id;
+        $this->country_id = Constants::MALDIVES_COUNTRY_ID;
+        $this->dnr_verified = 1;
+        $this->save(false);
+      }
     }
   }
 
@@ -263,6 +354,7 @@ class Persons extends CActiveRecord {
       'gender_id' => 'Gender',
       'perm_address_english' => 'House Name, Street',
       'perm_address_dhivehi' => 'ގޭގެ ނަން، މަގު',
+      'dnr_verified' => 'DNR Verified',
       'country_id' => 'Country',
       'photo_file_id' => 'Photo',
       'operation_log_id' => 'Operation Log',

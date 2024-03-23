@@ -95,6 +95,7 @@ class SiteController extends Controller {
         $errorLog->datetime = date('y-m-d H:i:s');
         $errorLog->setAttributes($error);
         $errorLog->log($error);
+        $errorLog->save();
       }
       if (Yii::app()->request->isAjaxRequest || $GLOBALS['isApiRequest'])
         echo $error['message'];
@@ -265,93 +266,96 @@ class SiteController extends Controller {
     #region initialize
     $onlineForm = new OnlineRegistrationForm();
     $onlineForm->approved = 0;
-    $docsArray = ['id_card_copy'];
     #endregion
 
     #region Handle Form Submission
+    
     if (!empty($_POST['OnlineRegistrationForm'])) {
-      #region Load Form Values
+
+
       $postedValues = $_POST['OnlineRegistrationForm'];
-      foreach ($docsArray as $doc) {
-        unset($postedValues[$doc]);
+      $postedValues['fardHajjPerformed'] = !empty($_POST['fard_hajj_performed']);
+
+      #region Load Form Values
+
+      #check OTP
+      $validOtp = PhoneSmsCodes::model()->findByAttributes(['phone' => $postedValues['phone_number_1'], 'code' => $_POST['otp']]);
+      if (empty($validOtp)) {
+        Yii::app()->user->setFlash('error',H::t('site','incorrectOtp'));
+        $this->refresh();
       }
+
+      if (!empty($person = Persons::model()->findByAttributes(['id_no' => trim($postedValues['id_no'])]))) {
+        $person->dnrVerifyPerson();
+        if (!empty($person->member)) {
+          Yii::app()->user->setFlash('error', H::t('site','idAlreadyRegistered'));
+          $this->refresh();
+        }
+      } else {
+        $person = new Persons();
+        $person->setAttributes([
+          'id_no' => $postedValues['id_no'],
+          'full_name_english' => $postedValues['full_name_english']
+        ]);
+        $person->dnrVerifyPerson();
+      }
+
+      // CVarDumper::dump($dnrData->gender_id, 10, 1);die;
+      if (!$person->dnr_verified) {
+        Yii::app()->user->setFlash('error', H::t('site', 'idInfoInvalid'));
+        $this->refresh();
+      } else {
+        $postedValues['full_name_english'] = $person->full_name_english;
+        $postedValues['full_name_dhivehi'] = $person->full_name_dhivehi;
+        $postedValues['perm_address_english'] = $person->perm_address_english;
+        $postedValues['perm_address_dhivehi'] = $person->perm_address_dhivehi;
+        $postedValues['perm_address_island_id'] = $person->perm_address_island_id;
+        $postedValues['d_o_b'] = $person->d_o_b;
+        $postedValues['gender_id'] = $person->gender_id;
+        $postedValues['country_id'] = Constants::MALDIVES_COUNTRY_ID;
+      }
+
+
+      $postedValues['id_card_copy'] = "not_required_anymore.png";
       $onlineForm->setAttributes($postedValues);
-      $onlineForm->approved = 0;
-      #endregion
-
-      #region Handle Files
-      $modelClass = get_class($onlineForm);
-      // Iterate file inputs received
-      foreach ($_FILES[$modelClass]['name'] as $fileAttribute => $fileName) {
-        $error = $_FILES[$modelClass]['error'][$fileAttribute];
-
-        // if file was not collected by the system
-        if ($error > 0) {
-
-          // if file was not provided by user
-          if (empty($fileName)) {
-
-            // add error if this is a required file
-            $onlineForm->validate([$fileAttribute], false);
-          }
-          else { // if file was uploaded but rejected
-            $onlineForm->addError($fileAttribute, $onlineForm->getAttributeLabel($fileAttribute)
-              . ' (' . $_FILES[$modelClass]['name'][$fileAttribute]
-              . ')' . H::t('size','fileTooLarge'));
-          }
-        }
-        else { // file was collected by system
-          // unique file name
-          $fileName = uniqid() . '_' . $onlineForm->id_no . '_' . $fileName;
-
-          $acceptFile = true; // by default
-          // check if a file already exists, and if so get path & delete it;
-          // do no accept file only if current file could be deleted!
-          if (!empty($onlineForm[$fileAttribute])
-            && !Helpers::deleteUploadedFile($onlineForm[$fileAttribute])
-          ) {
-            $acceptFile = false; // Do not accept file
-            Yii::app()->user->setFlash('error', H::t('site','cannotReplaceFile'));
-          }
-
-          if ($acceptFile) {
-            $onlineForm[$fileAttribute] = $fileName;
-            move_uploaded_file($_FILES[$modelClass]['tmp_name'][$fileAttribute], Yii::app()->params['uploadPath']
-              . $fileName);
-          }
-        }
-      }
-
       #endregion
 
       #region Save Transaction & Audit Info
-      $dbTransaction = Yii::app()->db->beginTransaction();
-      $dbTransaction->doAudit(ClientAudit::AUDIT_ACTION_CREATE, ClientAudit::AUDIT_DATA_ONLINE_REGISTRATION_FORM, $onlineForm, "New
-        Online Registration");
       try {
         $onlineForm->submitted_date_time = Yii::app()->params['dateTime'];
+        $onlineForm->approved = 1;
         $onlineForm->hash_key = base64_encode(sha1(uniqid(), true));
+        $dbTransaction = Yii::app()->db->beginTransaction();
+        $dbTransaction->doAudit(ClientAudit::AUDIT_ACTION_CREATE, ClientAudit::AUDIT_DATA_ONLINE_REGISTRATION_FORM, $onlineForm, "New
+          Online Registration");
+
         if ($onlineForm->save()) {
           $dbTransaction->commit();
-          $fieldName = H::tf('full_name_dhivehi');
-          Yii::app()->user->setFlash('success', $onlineForm->$fieldName .
-            H::t('site', 'faheliRegistrationReceived'));
-          Helpers::textMessage($onlineForm->phone_number_1, $onlineForm->full_name_english
-            . H::t('site', 'faheliRegistrationReceivedText'));
-          Helpers::textMessage(Helpers::adminMobile(), 'Online Registration '
-            . 'received. ID: ' . $onlineForm->id_no . ', Name: '
-            . $onlineForm->full_name_english);
-          if (!empty($onlineForm->email_address))
-            $this->sendOnlineRegistrationReceived($onlineForm);
-          $this->redirect(['registrationSubmitted', 'key' =>
-            $onlineForm->hash_key]);
+
+          # Log in the user
+          $identity = new UserIdentity($person->id, null);
+          Yii::app()->user->login($identity, (3600 * ((int)Helpers::config('rememberPeriod'))));
+
+          # Register for Hajj
+          $this->person = $person;
+
+          #region Create New App Form & load available data
+          if (!empty($this->person->member))
+            $this->redirect(['registration/index']);
+
+
+          #remove any existing forms          
+          $this->person->registerMember($postedValues['fardHajjPerformed']);
+
+          $this->redirect(['registration/index']);
+              
+
         }
-        if ($onlineForm->hasErrors('id_card_copy') == false)
-          $onlineForm->addError('main', H::t('site', 'attachIdAgain'));
       } catch (CException $ex) {
         ErrorLog::exceptionLog($ex);
-        Yii::app()->user->setFlash('error', H::t('site',
-          'faheliRegistrationError'));
+          Yii::app()->user->setFlash('error', H::t('site',
+            'faheliRegistrationError'));
+         // CVarDumper::dump($ex,10,1);die;
       }
       #endregion
     }
@@ -442,7 +446,6 @@ EOT;
     if (isset($_POST['CodeVerificationForm'])) {
       $model->attributes = $_POST['CodeVerificationForm'];
       if ($model->validate() && $model->login()) {
-
         $this->redirect(['site/router']);
       }
     }

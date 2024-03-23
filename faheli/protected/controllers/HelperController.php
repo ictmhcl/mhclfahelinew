@@ -27,7 +27,7 @@ class HelperController extends Controller {
     return [
       [
         'allow', // allow all users to perform 'index' and 'view' actions
-        'actions' => ['generateHajjLists', 'atollIslands', 'dhivehiName' ,'testMessage'],
+        'actions' => ['generateHajjLists', 'atollIslands', 'dhivehiName' ,'testMessage', 'phoneOtp'],
         'users' => ['*'],
       ], [
         'allow',
@@ -112,8 +112,9 @@ class HelperController extends Controller {
       ]
     ]));
   }
+  
 
-  public function actionTestMessage($number = 7774489, $message = 'This is a test') {
+  public function actionTestMessage($number = 7774489, $message = 'Mohamed Nazim') {
     Helpers::textMessage($number, $message);
   }
 
@@ -889,14 +890,35 @@ class HelperController extends Controller {
   }
 
 
-  #endregion
+  #endregionƒa
 
+  public function actionPhoneOtp($number) {
+    $code = Helpers::generateCode(6);
+    $codeSent = Helpers::textMessage($number, 'MHCL Faheli OTP: '.$code);
+    if ($codeSent) {
+      if (!empty($phoneOtp = PhoneSmsCodes::model()->findByAttributes(['phone' => $number]))) {
+        $phoneOtp->code = $code;
+        $phoneOtp->save(false);
+      } else {
+        $phoneOtp = new PhoneSmsCodes();
+        $phoneOtp->phone = $number;
+        $phoneOtp->code = $code;
+        $phoneOtp->save(false);
+      }
+      $this->_sendResponse(200, CJSON::encode(['status' => 'success', 'message'=> H::t('site','otpSent')]));
+    }
+    $this->_sendResponse(200, CJSON::encode(['status' => 'failed', 'message'=> H::t('site', 'cannotSendOtp')]));
+
+  }
 
   #region Helper APIs (dhivehiName, passwordStrength, hajjiDetails)
 
   public function actionDhivehiName($q) {
     $this->_sendResponse(200, CJSON::encode(['dhivehiName' => Helpers::getFullDhivName($q)]));
   }
+
+  
+
 
   public function actionPasswordStrength($p) {
     /** @var Users $curUser */

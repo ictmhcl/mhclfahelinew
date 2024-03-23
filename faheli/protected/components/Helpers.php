@@ -192,6 +192,7 @@ class Helpers {
    * @throws \Exception
    */
   public static function textMessage($recipient, $message) {
+    
     if (!is_array($recipient))
       $recipient = [$recipient];
     Yii::import('ext.ooredooMessaging.uriduMsg');
@@ -954,5 +955,36 @@ class Helpers {
     return (isset($codes[$status])) ? $codes[$status] : '';
   }
   #endregion
+
+
+
+  /**
+   * Fetch DNR Records using DNR API in extensions (MHCL Internal Server)
+   */
+
+   public static function getDnrRecord($idNo, $name) {
+
+    Yii::import('ext.DnrAPI');
+    $api = new DnrAPI();
+    
+    # sanitize
+    $id_card_no = trim($idNo);
+    $name = trim($name);
+    if (preg_match(Constants::ID_CARD_PATTERN, $id_card_no) != 1) 
+      return False;
+      // $this->_sendResponse(200, CJSON::encode(['status' => 'failed','Invalid Input for ID: ' . $id_card_no]));
+  
+    $names = explode(' ', $name);
+
+    foreach ($names as $name) {
+      $data = $api->checkDNR($id_card_no, $name);
+      if ($data != False)
+        return $data;
+    }
+
+    // NOTHING FOUND
+    return False;
+
+   }
 
 }

@@ -47,20 +47,23 @@ class Controller extends CController {
     if (!Yii::app()->user->isGuest) {
       $serverPort = $_SERVER['SERVER_PORT'];
       if (443 != $serverPort) {
-        Yii::app()->user->logout();
-        $this->refresh();
+      Yii::app()->user->logout();
+      $this->refresh();
       }
       $this->person = Persons::model()->findByPk(Yii::app()->user->id);
-		
-      $this->processPayments = $GLOBALS['cfg']['processPayments'];
-      Yii::app()->params['person'] = $this->person;
-      if (!$this->person->agreed_to_terms_of_use
-          && !in_array(Yii::app()->request->pathInfo,['users/userAgreement',
-                                                      'site/logout',
-                                                      'site/lang'])
-        ) {
-        Yii::app()->user->returnUrl = Yii::app()->request->url;
-        Yii::app()->controller->redirect(['users/userAgreement']);
+      if (empty($this->person)) {
+        Yii::app()->user->logout();
+      } else {
+          $this->processPayments = $GLOBALS['cfg']['processPayments'];
+          Yii::app()->params['person'] = $this->person;
+          if (!$this->person->agreed_to_terms_of_use
+              && !in_array(Yii::app()->request->pathInfo,['users/userAgreement',
+                                                          'site/logout',
+                                                          'site/lang'])
+            ) {
+            Yii::app()->user->returnUrl = Yii::app()->request->url;
+            Yii::app()->controller->redirect(['users/userAgreement']);
+        }
       }
 
     }

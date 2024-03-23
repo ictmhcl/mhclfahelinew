@@ -20,6 +20,7 @@ return [
   'mobile' => 'Mobile Number',
   'sendLoginCode' => 'Send Login Code',
   'registerOnPortal' => 'Register on this Portal',
+  'tickIfFardHajjPerformed' => 'Tick if Fard Hajj is Completed',
 
   // Validations in phoneVerifyForm model
   'required' => ' is required',
@@ -33,6 +34,7 @@ return [
   'full_name_dhivehi' => 'Name in Thaana',
   'd_o_b' => 'Birthday',
   'addressContactInfo' => 'Address & Contact Info',
+  'contactInfo' => 'Contact Information',
   'perm_address_island_id' => 'Perm. Island', 'gender_id' => 'Gender',
   'perm_address_english' => 'Perm. Address',
   'perm_address_dhivehi' => 'Address in Thaana',
@@ -44,9 +46,15 @@ return [
   'permIslandRequired' => 'Permanent Atoll and Island is required',
   'selectAtoll' => 'Select Atoll',
   'selectIsland' => 'Select Island',
+  'otp' => 'OTP',
+  'sendOtp' => 'Send OTP',
+  'cannotSendOtp' => 'Could not send OTP. Please report the issue on 3011000',
+  'otpSent' => 'OTP sent to Mobile number',
+  'incorrectOtp' => 'OTP is incorrect',
 
   'fileTooLarge' => ' was not accepted! File may be larger than server limit.',
   'cannotReplaceFile' => 'There has been an internal error! Could not replace existing file!',
+  'idInfoInvalid' => 'The information submitted is invalid. Please type the name as it is on the ID Card.',
   'idAlreadyInRegistration' => 'The ID Card is already submitted for
   registration. Please contact us for further information or fix ID Card
   Number errors.',
@@ -61,10 +69,12 @@ return [
   'faheliRegistrationReceivedText' => '\'s registration has been received. We
   will contact you after registration is approved or if there is any
   clarification required with the registration.',
+  'faheliMemberRegistered' => ' has been registered as a member of Hajj Corporation. MHCL',
   'faheliRegistrationError' => 'Could not save the registration due to an
   error. The error has been logged and will be resolved ASAP.',
   // general
   'submit' => 'Submit',
+  'check' => 'Check',
   'attach' => ' should be attached',
   'attachIdAgain' => 'Attach ID Card again',
   'fileSelect' => 'Browse',

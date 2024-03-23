@@ -53,57 +53,18 @@
           <div class="col-md-4 formDisplay">
             <?=$onlineForm->full_name_english?>
           </div>
-          <?php echo $form->labelEx($onlineForm, 'full_name_dhivehi', ['class' => 'col-md-2 control-label']); ?>
-          <div class="col-md-4 formDisplay">
-            <?=$onlineForm->full_name_dhivehi?>
-          </div>
         </div>
         <div class="form-group">
           <?php echo $form->labelEx($onlineForm, 'id_no', ['class' => 'col-md-2 control-label']); ?>
           <div class="col-md-2 formDisplay">
             <?=$onlineForm->id_no?>
           </div>
-          <?php echo $form->labelEx($onlineForm, 'd_o_b', ['class' => 'col-md-2 control-label']); ?>
-          <div class="col-md-2 formDisplay">
-            <?=Helpers::mvDate($onlineForm->d_o_b)?>
-          </div>
-          <?php echo $form->labelEx($onlineForm, 'gender_id', ['class' => 'col-md-1 control-label']); ?>
-          <div class="col-md-2 formDisplay">
-            <?=$onlineForm->gender->name_dhivehi?>
-          </div>
         </div>
       </div>
     </div>
     <div class="panel panel-success">
-      <div class="panel-heading"><?=H::t('site', 'addressContactInfo')?></div>
+      <div class="panel-heading"><?=H::t('site', 'contactInfo')?></div>
       <div class="panel-body">
-        <div class="form-group row">
-          <?php echo $form->labelEx($onlineForm, 'country_id', ['class' => 'control-label col-md-2']); ?>
-          <div class="col-md-2 formDisplay">
-            <?=$onlineForm->country->name_dhivehi?>
-          </div>
-          <div class="permIsland"
-               style="display:<?=$onlineForm->country_id ==
-               Constants::MALDIVES_COUNTRY_ID ? 'block' : 'none'?>">
-            <?php echo $form->labelEx($onlineForm, 'perm_address_island_id', [
-              'class' => 'control-label col-md-1'
-            ]); ?>
-
-            <div class="col-md-4 formDisplay">
-              <?=$onlineForm->atollIslandDhivehi?>
-            </div>
-          </div>
-        </div>
-        <div class="form-group">
-          <?php echo $form->labelEx($onlineForm, 'perm_address_english', ['class' => 'col-md-2 control-label']); ?>
-          <div class="col-md-4 formDisplay">
-            <?=$onlineForm->perm_address_english?>
-          </div>
-          <?php echo $form->labelEx($onlineForm, 'perm_address_dhivehi', ['class' => 'control-label col-md-2']); ?>
-          <div class="col-md-4 formDisplay">
-            <?=$onlineForm->perm_address_dhivehi?>
-          </div>
-        </div>
         <div class="form-group">
           <?php echo $form->labelEx($onlineForm, 'phone_number_1', ['class' => 'col-md-2 control-label']); ?>
           <div class="col-md-3 formDisplay">
@@ -117,29 +78,7 @@
 
       </div>
     </div>
-    <div class="panel panel-success">
-      <div class="panel-heading"><?=H::t('site', 'documents')?></div>
-      <div class="panel-body">
 
-        <div class="form-group">
-          <?php
-          foreach ($docsArray as $doc) {
-            $labelSize = $doc == "id_card_copy" ? 'col-md-2' : 'col-md-2';
-            $viewSize = $doc == "id_card_copy" ? 'col-md-2' : 'col-md-1';
-            echo $form->labelEx($onlineForm, $doc, [
-              'class' => $labelSize . ' control-label'
-            ]);
-            echo CHtml::link(H::t('site','view'), Helpers::sysUrl
-              (Constants::UPLOADS) .
-              $onlineForm->$doc, [
-              'target' => '_blank', 'class' => 'formDisplay'
-            ]);
-
-          }
-          ?>
-        </div>
-      </div>
-    </div>
     <?php $this->endWidget(); ?>
 
   </div><!-- form -->

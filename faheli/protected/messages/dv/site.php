@@ -20,6 +20,7 @@ return [
   'mobile' => 'މޯބައިލް ނަމްބަރު',
   'sendLoginCode' => 'ވެރިފިކޭޝަން ކޯޑު މޯބައިލަށް ފޮނުވާ',
   'registerOnPortal' => 'ޕޯޓަލްގައި ރަޖިސްޓްރީ ކުރުން',
+  'tickIfFardHajjPerformed' => 'ފަރުޟު ޙައްޖު ކޮށްފައިނަމަ ފާހަގަޖަހާ',
 
   // Validations in phoneVerifyForm model
   'required' => ' ޖައްސަވަން ޖެހޭ',
@@ -33,6 +34,7 @@ return [
   'full_name_dhivehi' => 'ފުރިހަމަ ނަން (ދިވެހިން)',
   'd_o_b' => 'އުފަން ތާރީޚް',
   'addressContactInfo' => 'ދާއިމީ އެޑްރެސް އާއި ގުޅޭނޭގޮތް',
+  'contactInfo' => 'ގުޅޭނޭގޮތް',
   'perm_address_island_id' => 'ދާއިމީ ރަށް', 'gender_id' => 'ޖިންސު',
   'perm_address_english' => 'ދާއިމީ އެޑްރެސް (އިނގިރޭސިން)',
   'perm_address_dhivehi' => 'ދާއިމީ އެޑްރެސް (ދިވެހިން)',
@@ -44,9 +46,15 @@ return [
   'permIslandRequired' => 'ދާއިމީ އަތޮޅާއި ރަށް ފުރިހަމަ ކުރައްވާ',
   'selectAtoll' => 'އަތޮޅު ނަންގަވާ',
   'selectIsland' => 'ރަށެއް ނަންގަވާ',
+  'sendOtp' => 'އޯ.ޓީ.ޕީ ފޮނުވާ',
+  'otp' => 'އޯ.ޓީ.ޕީ',
+  'cannotSendOtp' => 'އޯ.ޓީ.ޕީ އެއް ނުފޮނުވު. 3011000 އަށް ގުޅުއްވާފައި މައްސަލަ ރިޕޯޓް ކުރައްވާ',
+  'otpSent' => 'މޯބައިލް ނަންބަރަށް އޯ.ޓީ.ޕީ ފޮނުވިއްޖެ',
+  'incorrectOtp' => 'އޯ.ޓީ.ޕީ ރަނގަޅެއްނޫން',
 
   'fileTooLarge' => ' ޤަބޫލެއް ނުކުރެވުނު. ފައިލް ސައިޒް ކުޑަކުރައްވައިގެން މަސައްކަތް ކޮށްލައްވާ',
   'cannotReplaceFile' => 'މައްސަލައެއް ދިމާވެއްޖެ. ކުރީ ފައިލް ބަދަލއް ނުކުރެވުނު.',
+  'idInfoInvalid' => 'ތިޔަ މަޢުލޫމާތު ރަނގަޅެއްނޫން. އައި.ޑީ. ކާޑުގައި އޮތް ގޮތަށް ނަން ޖައްސަވާ',
   'idAlreadyInRegistration' => 'ތިޔަ އައި.ޑީ ކާޑު ރަޖިސްޓްރީ ކުރުމަށް ވަނީ މިހާރުވެސް ހުށަހެޅިފައި. މިކަމުގެ އިތުރު މަޢުލޫމާތު ހޯއްދެވުމަށް މިއޮފީހަށް ގުޅުއްވާ ނޫނީ ރަނގަޅު އައި.ޑީ ނަމްބަރު ޖައްސަވާ',
   'idAlreadyRegistered' => 'ތިޔަ އައި.ޑީ ކާޑު މިހާރުވެސް ވަނީ ރަޖިސްޓްރީ ކުރެވިފައި. ރަޖިސްޓްރީ ކުރެވިފއިވާ ފޯނު ނަމްބަރު ހޯއްދެވުމަށް މިއޮފީހަށް ގުޅުއްވާ ނޫނީ ރަނގަޅު އައި.ޑީ ނަމްބަރު ޖައްސަވާ',
   // flash alerts
@@ -59,12 +67,14 @@ return [
     . ' kurumah fahu verify kolleveyne eve.'
     . ' 24 gadi irah fahu login- kollevvumah fahu portal medhuverkoh'
     . ' hidhumathah edhey form hushahelhuvvun edhemeve. MHCL',
+  'faheliMemberRegistered' => ' Hajj Corporation ge member akah registry kurevijje. MHCL',
   'faheliRegistrationError' => 'ދިމާވި މައްސަލައކާއި ގުޅިގެން
         ރަޖިސްޓްރޭޝަން ރައްކާކުރެވޭ ގޮތެއް ނުވި. މިމައްސަލަ މިހާރު ވަނީ ލޮގް
         ކުރެވިފައި، އަދި ވީ އެންމެ އަވަހަކަށް މައްސަލަ ޙައްލު ކުރެވޭނެ.',
 
   //general
   'submit' => 'ހުށަހަޅާ',
+  'check' => 'ޗެކް',
   'attach' => ' އެޓޭޗް ކުރައްވާ',
   'attachIdAgain' => 'އައި.ޑީ ކާޑު ކޮޕީ އަލުން އެޓެޗް ކުރައްވާ',
   'fileSelect' => 'ފައިލް ނަންގަވާ',
