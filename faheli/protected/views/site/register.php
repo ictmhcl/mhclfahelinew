@@ -76,7 +76,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl
                 'style' => 'direction: ltr', 'placeholder' => ''
               ]); ?>
               <span class="input-group-btn">
-                <button class="btn btn-default" id="otp-button" type="button"><?=H::t('site','sendOtp')?></button>
+                <button class="btn btn-danger" id="otp-button" type="button"><?=H::t('site','sendOtp')?></button>
               </span>
             </div><!-- /input-group -->
             <script>
