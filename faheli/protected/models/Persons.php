@@ -155,7 +155,6 @@ class Persons extends CActiveRecord {
     if (!$this->dnr_verified)
       return False;
 
-    
     #remove any existing forms          
     if (!empty($existingHajjForm = ApplicationForms::model()->findByAttributes(['id_no'=>$this->id_no])))
     {
@@ -184,7 +183,7 @@ class Persons extends CActiveRecord {
       'application_form' => 'not_required_anymore.png',
     ]);
 
-    $hajjForm->state_id = Constants::APPLICATION_PENDING_VERIFICATION;
+    $hajjForm->state_id = Constants::APPLICATION_REGISTERED;
     try {
       if (!$hajjForm->save())
         throw new CException("Registration of " . $this->id_no . " validation errors: " .  CJSON::encode($hajjForm->errors));
